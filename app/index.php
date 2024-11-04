@@ -1,15 +1,16 @@
 <?php
 
-$aFiles = array_merge(glob("*.mp3"), glob("/opt/music/**/*.mp3"));
-
-
 $aAlbums = [];
 $aTracks = [];
 
-if(empty($aFiles)) die("no music found. Make sure to put some MP3 - Files into /opt/music (aka. ./music folder of the Repo)");
-
-$oDirs = new RecursiveDirectoryIterator("/opt/music/", FilesystemIterator::SKIP_DOTS|FilesystemIterator::KEY_AS_PATHNAME|FilesystemIterator::CURRENT_AS_FILEINFO);
-$oIterator = new RecursiveIteratorIterator($oDirs);
+$oIterator = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator(
+        "/opt/music/", 
+        FilesystemIterator::SKIP_DOTS|
+        FilesystemIterator::KEY_AS_PATHNAME|
+        FilesystemIterator::CURRENT_AS_FILEINFO
+    )
+);
 
 foreach($oIterator as $sEntry => $oDir) {
     $aMatch = [];
