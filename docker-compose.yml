@@ -1,0 +1,12 @@
+services:
+  player:
+    build: 
+      dockerfile: Dockerfile
+
+    ports:
+      - "58008:80"
+
+    volumes:
+      - "./app:/var/www/html"
+      - "./music:/opt/music/app"
+     
