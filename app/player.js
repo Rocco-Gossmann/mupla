@@ -13,15 +13,19 @@ const MyPlayer = (function () {
 
     if (!player) throw new Error("Could not find '#audioplayer' DOM-Element");
 
-    function playTrack(idx) {
+    function playTrack(idx, useShuffle=false) {
         // remove highlight from all track links
         document.querySelectorAll(".track_link").forEach((l) => l.classList.remove("active") );
 
         // Find Track in current playlist 
         currentTrack = Math.abs(idx % tracks.length);
 
-        const trackFile = tracks[currentTrack]['file'];
-        const file = playlist.filter(e => e['file'] == trackFile)[0]
+        let file = playlist[currentTrack]; 
+
+        if(!useShuffle) {
+            const trackFile = tracks[currentTrack]['file'];
+            file = playlist.filter(e => e['file'] == trackFile)[0]
+        }
 
         const domtrack = document.querySelector(`#track_${file["idx"]}`);
         domtrack.classList.add("active");
@@ -33,7 +37,6 @@ const MyPlayer = (function () {
     }
 
     function toggleShuffle(toggle) {
-        console.log(toggle);
         if (toggle) {
             playlist = [...tracks]
                 .sort(() => (Math.random() - 0.5) * 2)
@@ -46,11 +49,11 @@ const MyPlayer = (function () {
         }
     }
     function playNext() {
-        playTrack(currentTrack + 1);
+        playTrack(currentTrack + 1, true);
     }
 
     function playPrev() {
-        playTrack(currentTrack - 1);
+        playTrack(currentTrack - 1, true);
     }
 
     function registerTracks(_tracks) {
@@ -60,6 +63,8 @@ const MyPlayer = (function () {
 
     player.addEventListener("canplay", () => player.play());
     player.addEventListener("ended", playNext);
+    navigator.mediaSession.setActionHandler('nexttrack', playNext);
+    navigator.mediaSession.setActionHandler('previoustrack', playPrev);
 
     const successPlayerState = {
         playNext,
