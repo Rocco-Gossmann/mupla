@@ -3,18 +3,18 @@
 $aAlbums = [];
 $aTracks = [];
 
-$oIterator = new RecursiveIteratorIterator(
+$aFiles = new RecursiveIteratorIterator(
     new RecursiveDirectoryIterator(
-        "/opt/music/", 
-        FilesystemIterator::SKIP_DOTS|
-        FilesystemIterator::KEY_AS_PATHNAME|
-        FilesystemIterator::CURRENT_AS_FILEINFO
+        "/opt/music/",
+        FilesystemIterator::SKIP_DOTS |
+            FilesystemIterator::KEY_AS_PATHNAME |
+            FilesystemIterator::CURRENT_AS_FILEINFO
     )
 );
 
-foreach($oIterator as $sEntry => $oDir) {
+foreach ($aFiles as $sEntry => $oDir) {
     $aMatch = [];
-    if (!preg_match("#/opt/music/(?<file>.*\.mp3)$#i", realpath($sEntry) , $aMatch))
+    if (!preg_match("#/opt/music/(?<file>.*\.mp3)$#i", realpath($sEntry), $aMatch))
         continue;
 
     $sAlbum = dirname($aMatch['file']);
@@ -26,7 +26,7 @@ foreach($oIterator as $sEntry => $oDir) {
     $aTracks[] = ['file' => $aMatch['file'], 'idx' => count($aTracks)];
 }
 
-if(empty($aTracks)) die("no music found. Make sure to put some MP3 - Files into /opt/music (aka. ./music folder of the Repo)");
+if (empty($aTracks)) die("no music found. Make sure to put some MP3 - Files into /opt/music (aka. ./music folder of the Repo)");
 
 ?>
 <!DOCTYPE html>

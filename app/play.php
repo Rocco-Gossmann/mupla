@@ -2,6 +2,8 @@
 header("content-type: audio/mpeg");
 $sFile = "/opt/music/" . $_GET['track'];
 
+ob_implicit_flush(true);
+
 $f = fopen($sFile, "r");
 if (!$f) {
     http_response_code(404);

@@ -14,12 +14,14 @@ const MyPlayer = (function () {
     if (!player) throw new Error("Could not find '#audioplayer' DOM-Element");
 
     function playTrack(idx) {
-        document.querySelectorAll(".track_link").forEach((l) => {
-            l.classList.remove("active");
-        });
+        // remove highlight from all track links
+        document.querySelectorAll(".track_link").forEach((l) => l.classList.remove("active") );
 
+        // Find Track in current playlist 
         currentTrack = Math.abs(idx % tracks.length);
-        const file = playlist[currentTrack];
+
+        const trackFile = tracks[currentTrack]['file'];
+        const file = playlist.filter(e => e['file'] == trackFile)[0]
 
         const domtrack = document.querySelector(`#track_${file["idx"]}`);
         domtrack.classList.add("active");
